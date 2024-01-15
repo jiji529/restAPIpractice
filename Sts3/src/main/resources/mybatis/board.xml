@@ -3,9 +3,34 @@
 
 <mapper namespace="board">
 
-<select id="getOne" resultType="Board">
-	SELECT * FROM board where CAST(board_id AS CHAR) = #{boardId}
+<select id="getList" resultType="Board">
+	SELECT * FROM board
 </select>
 
+<select id="getOne" resultType="Board">
+	SELECT * FROM board WHERE board_id = #{boardId}
+</select>
+
+<insert id="postBoard">
+	INSERT INTO board
+		(board_sj, board_cn, user_nm, frst_regist_pnttm, board_use_yn) 
+	VALUES 
+		(#{boardSj}, #{boardCn}, #{userNm}, NOW(), #{boardUseYn})
+</insert>
+
+<!-- patch 메소드 : 부분 수정 기능-->
+<update id="updateBoardPart">
+	UPDATE board 
+	<set>
+		<if test="boardSj != null">board_sj=#{boardSj},</if>	
+		<if test="boardCn != null">board_cn=#{boardCn},</if>	
+		<if test="boardUseYn != null">board_use_yn=#{boardUseYn}</if>	
+	</set>
+	WHERE board_id = #{boardId}
+</update>
+
+<delete id="deleteBoard">
+	DELETE FROM board WHERE board_id = #{boardId}
+</delete>
 
 </mapper>
